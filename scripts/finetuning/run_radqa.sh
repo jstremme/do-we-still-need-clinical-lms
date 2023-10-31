@@ -1,20 +1,22 @@
 #!/bin/sh
-INPUT_MODEL=$1
-OUT_DIR=$2
-LR=$3
+INPUT_MODEL="/Users/jstremme/models/RoBERTa-base-PM-M3-Voc-distill-align/RoBERTa-base-PM-M3-Voc-distill-align-hf"
+OUT_DIR="../../model_outputs"
+LR=0.00001
 
 echo 'Input: ' $INPUT_MODEL
 echo 'Output: ' $OUT_DIR
 echo 'LR: ' $LR
 
+# use effective batch size of 64 per paper
+
 for i in 1 2 3
 do
     echo "Storing in $OUT_DIR/seed_$i/"
-    python -m torch.distributed.launch --nproc_per_node 4 src/finetuning/run_seq2seq_qa.py \
+    python ../../src/finetuning/run_seq2seq_qa.py \
       --model_name_or_path $INPUT_MODEL \
-      --train_file "data/radqa_data/train.csv" \
-      --validation_file "data/radqa_data/dev.csv" \
-      --test_file "data/radqa_data/test.csv" \
+      --train_file "../../data_preprocessed/radqa/train.csv" \
+      --validation_file "../../data_preprocessed//radqa/dev.csv" \
+      --test_file "../../data_preprocessed//radqa/test.csv" \
       --context_column context \
       --question_column question \
       --answer_column answers \
@@ -22,8 +24,8 @@ do
       --do_eval \
       --do_predict \
       --save_total_limit 1 \
-      --per_device_train_batch_size 1 \
-      --gradient_accumulation_steps 16 \
+      --per_device_train_batch_size 2 \
+      --gradient_accumulation_steps 32 \
       --per_device_eval_batch_size 1 \
       --num_train_epochs 15 \
       --version_2_with_negative \

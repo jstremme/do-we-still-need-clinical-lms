@@ -1,24 +1,25 @@
 #!/bin/sh
-INPUT_MODEL=$1
-OUT_DIR=$2
-LR=$3
-MAX_SEQ=$4
-STRIDE=$5
-BS=$6
-GAS=$7
+INPUT_MODEL="/Users/jstremme/models/RoBERTa-base-PM-M3-Voc-distill-align/RoBERTa-base-PM-M3-Voc-distill-align-hf"
+OUT_DIR="../../model_outputs"
+LR=0.00001
+MAX_SEQ=512
+STRIDE=128
+BS=2
+GAS=32
+
+# use effective batch size of 64 per paper
 
 echo 'Input: ' $INPUT_MODEL
 echo 'Output: ' $OUT_DIR
 
-for i in 1 2 3
+for i in 1 2 # 3
 do
-    echo "Saving to: $OUT_DIR/seed_$i/"
-    deepspeed --num_gpu 4 src/finetuning/run_qa.py \
+    echo "Saving to: $OUT_DIR/seed_$i/" 
+    python ../../src/finetuning/run_qa.py \
         --model_name_or_path $INPUT_MODEL \
-        --is_gpt_model \
-        --train_file "data/radqa_data/train.csv" \
-        --validation_file "data/radqa_data/dev.csv" \
-        --test_file "data/radqa_data/test.csv" \
+        --train_file "../../data_preprocessed/radqa/train.csv" \
+        --validation_file "../../data_preprocessed//radqa/dev.csv" \
+        --test_file "../../data_preprocessed//radqa/test.csv" \
         --version_2_with_negative \
         --do_train \
         --do_eval \
@@ -39,5 +40,5 @@ do
         --max_seq_length $MAX_SEQ \
         --doc_stride $STRIDE \
         --output_dir "$OUT_DIR/seed_$i/" \
-        --deepspeed deep_speed_config.json
+
 done

@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import argparse
 from tqdm import tqdm
-from preprocessing.convert_deid_to_tag import convert_deid_to_tag, convert_tag_type_to_tag
+from convert_deid_to_tag import convert_deid_to_tag, convert_tag_type_to_tag
 
 def replace_single_note(text: str, note_type: str):
     """Find the offsets for a single note."""

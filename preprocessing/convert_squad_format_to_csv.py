@@ -33,9 +33,9 @@ def convert_squad_to_csv_fmt(jf: dict, out_f: str):
     csv.to_csv(out_f, index=False)
 
 if __name__ == '__main__':
-    pairs = [('data/ids_to_ignore/radqa_ids/radqa_train.json', 'data/radqa_data/train.csv'), 
-             ('data/ids_to_ignore/radqa_ids/radqa_dev.json', 'data/radqa_data/dev.csv'), 
-             ('data/ids_to_ignore/radqa_ids/radqa_test.json', 'data/radqa_data/test.csv')]
+    pairs = [('../data/radqa/train.json', '../data/radqa/train.csv'), 
+             ('../data/radqa/dev.json', '../data/radqa/dev.csv'), 
+             ('../data/radqa/test.json', '../data/radqa/test.csv')]
     
     for p in pairs:
         jf = json.load(open(p[0]))

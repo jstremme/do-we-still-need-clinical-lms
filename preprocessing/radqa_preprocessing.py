@@ -3,7 +3,7 @@ import glob
 import argparse
 import numpy as np
 import pandas as pd
-from preprocessing.replace_deid_tags import replace_list_of_notes
+from replace_deid_tags import replace_list_of_notes
 
 def preprocess_answers(df: pd.DataFrame) -> pd.DataFrame:
     """Modify the answers.  """
